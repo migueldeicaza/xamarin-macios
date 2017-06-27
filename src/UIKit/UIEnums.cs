@@ -1988,4 +1988,41 @@ namespace XamCore.UIKit {
 		Automatic,
 		AlwaysHidden
 	}
+
+	[NoTV, iOS (11,0)]
+	[Native]
+	public enum UIContextualActionStyle : nint
+	{
+		Normal,
+		Destructive
+	}
+
+	[iOS (11,0)]
+	[Native]
+	public enum UITextSmartQuotesType : nint
+	{
+		Default,
+		No,
+		Yes
+	}
+	
+	[iOS (11,0)]
+	[Native]
+	public enum UITextSmartDashesType : nint
+	{
+		Default,
+		No,
+		Yes
+	}
+	
+	[iOS (11,0)]
+	[Native]
+	public enum UITextSmartInsertDeleteType : nint
+	{
+		Default,
+		No,
+		Yes
+	}
+	
+
 }

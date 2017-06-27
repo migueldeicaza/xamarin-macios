@@ -8777,6 +8777,10 @@ namespace XamCore.Foundation
 		[Mac (10,12)]
 		[Export ("registerCloudKitShare:container:")]
 		void RegisterCloudKitShare (CKShare share, CKContainer container);
+#else
+		[iOS(11,0), NoWatch, NoTV]
+		[NullAllowed, Export ("teamData", ArgumentSemantic.Copy)]
+		NSData TeamData { get; set; }
 #endif
 	}
 

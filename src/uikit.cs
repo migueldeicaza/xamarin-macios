@@ -44,7 +44,7 @@ namespace XamCore.UIKit {
 	}
 
 	[Native] // NSInteger -> UIApplication.h
-	[NoTV][NoWatch]
+	[TV(11,0)][NoWatch]
 	public enum UIBackgroundRefreshStatus : nint {
 		Restricted, Denied, Available
 	}
@@ -2363,6 +2363,14 @@ namespace XamCore.UIKit {
 		[Static]
 		[Export ("runningPropertyAnimatorWithDuration:delay:options:animations:completion:")]
 		UIViewPropertyAnimator CreateRunningPropertyAnimator (double duration, double delay, UIViewAnimationOptions options, [NullAllowed] Action animations, [NullAllowed] Action<UIViewAnimatingPosition> completion);
+
+		[iOS (11,0), NoTV, NoWatch]
+		[Export ("scrubsLinearly")]
+		bool ScrubsLinearly { get; set; }
+	
+		[iOS (11,0), NoTV, NoWatch]
+		[Export ("pausesOnCompletion")]
+		bool PausesOnCompletion { get; set; }
 	}
 	
 	interface IUIViewControllerPreviewing {}
@@ -2856,17 +2864,17 @@ namespace XamCore.UIKit {
 		[Export ("beginBackgroundTaskWithName:expirationHandler:")]
 		nint BeginBackgroundTask (string taskName, NSAction expirationHandler);
 
-		[NoTV]
+		[TV(11,0)]
 		[Since (7,0)]
 		[Field ("UIApplicationBackgroundFetchIntervalMinimum")]
 		double BackgroundFetchIntervalMinimum { get; }
 
-		[NoTV]
+		[TV(11,0)]
 		[Since (7,0)]
 		[Field ("UIApplicationBackgroundFetchIntervalNever")]
 		double BackgroundFetchIntervalNever { get; }
 
-		[NoTV]
+		[TV(11,0)]
 		[Since (7,0)]
 		[Export ("setMinimumBackgroundFetchInterval:")]
 		void SetMinimumBackgroundFetchInterval (double minimumBackgroundFetchInterval);
@@ -2894,12 +2902,12 @@ namespace XamCore.UIKit {
 		[Field ("UIApplicationStateRestorationSystemVersionKey")]
 		NSString StateRestorationSystemVersionKey { get; }
 
-		[NoTV]
+		[TV(11,0)]
 		[Since (7,0)]
 		[Export ("backgroundRefreshStatus")]
 		UIBackgroundRefreshStatus BackgroundRefreshStatus { get; }
 
-		[NoTV]
+		[TV(11,0)]
 		[Since (7,0)]
 		[Notification]
 		[Field ("UIApplicationBackgroundRefreshStatusDidChangeNotification")]
@@ -3190,6 +3198,34 @@ namespace XamCore.UIKit {
 		AccessibilityExtraExtraExtraLarge
 	}
 
+#if XAMCORE_2_0
+	delegate void UIContextualActionHandler (UIContextualAction action, UIView sourceView, [BlockCallback] UICompletionHandler completionHandler);
+
+	[NoTV, iOS (11,0), NoWatch]
+	[BaseType (typeof(NSObject))]
+	interface UIContextualAction
+	{
+		[Static]
+		[Export ("contextualActionWithStyle:title:handler:")]
+		UIContextualAction Create (UIContextualActionStyle style, [NullAllowed] string title, UIContextualActionHandler handler);
+	
+		[Export ("style")]
+		UIContextualActionStyle Style { get; }
+	
+		[Export ("handler", ArgumentSemantic.Copy)]
+		UIContextualActionHandler Handler { get; }
+	
+		[NullAllowed, Export ("title")]
+		string Title { get; set; }
+	
+		[NullAllowed, Export ("backgroundColor", ArgumentSemantic.Copy)]
+		UIColor BackgroundColor { get; set; }
+	
+		[NullAllowed, Export ("image", ArgumentSemantic.Copy)]
+		UIImage Image { get; set; }
+	}
+#endif
+	
 	interface IUICoordinateSpace {}
 	
 	[Protocol]
@@ -3479,6 +3515,16 @@ namespace XamCore.UIKit {
 		[Export ("landscapeImagePhoneInsets")]
 		UIEdgeInsets LandscapeImagePhoneInsets { get; set;  }
 
+		[NoTV]
+		[iOS (11,0)]
+		[NullAllowed, Export ("largeContentSizeImage", ArgumentSemantic.Strong)]
+		UIImage LargeContentSizeImage { get; set; }
+	
+		[NoTV]
+		[iOS (11, 0)]
+		[Export ("largeContentSizeImageInsets", ArgumentSemantic.Assign)]
+		UIEdgeInsets LargeContentSizeImageInsets { get; set; }
+		
 		[Since (5,0)]
 		[Export ("setTitleTextAttributes:forState:"), Internal]
 		[Appearance]
@@ -5893,6 +5939,19 @@ namespace XamCore.UIKit {
 		[iOS (10, 0)] // Did not add abstract here breaking change, anyways this is optional in objc
 		[Export ("textContentType")]
 		NSString TextContentType { get; set; }
+
+		[iOS (11,0)]
+		[Export ("smartQuotesType", ArgumentSemantic.Assign)]
+		UITextSmartQuotesType SmartQuotesType { get; set; }
+
+		[iOS (11,0)]
+		[Export ("smartDashesType", ArgumentSemantic.Assign)]
+		UITextSmartDashesType SmartDashesType { get; set; }
+	
+		[iOS (11,0)]
+		[Export ("smartInsertDeleteType", ArgumentSemantic.Assign)]
+		UITextSmartInsertDeleteType SmartInsertDeleteType { get; set; }
+		
 	}
 
 	interface UIKeyboardEventArgs {
@@ -14165,6 +14224,14 @@ namespace XamCore.UIKit {
 
 		[Field ("UITextContentTypeCreditCardNumber")]
 		NSString CreditCardNumber { get; }
+
+		[iOS(11,0)]
+		[Field("UITextContentTypeUsername")]
+		NSString Username { get; }
+
+		[iOS(11,0)]
+		[Field ("UITextContentTypePassword")]
+		NSString Password { get; } 
 	}
 	
 	[Since (3,2)]
